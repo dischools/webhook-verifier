@@ -15,7 +15,20 @@ app.get('/webhook', (req, res) => {
     res.sendStatus(403);
   }
 });
+const axios = require('axios');
 
+app.post('/webhook', async (req, res) => {
+  try {
+    console.log('Meta Message:', JSON.stringify(req.body, null, 2));
+
+    await axios.post('https://dischools.app.n8n.cloud/webhook/whatsapp-incoming', req.body);
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.error('Forwarding to n8n failed:', error.message);
+    res.sendStatus(500);
+  }
+});
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
